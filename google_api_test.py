@@ -22,12 +22,14 @@ class google_api_test(unittest.TestCase):
     def test_TC01_update_location(self) :
         service = build('calendar', 'v3', credentials=creds)
         calendar = service.calendars().get(calendarId='primary').execute()
+        
         calendar['location'] = 'test-location'
         updated_calendar = service.calendars().update(calendarId=calendar['id'], body=calendar).execute()
         # update 요청이 정상적으로 적용 되었는지 assertEqual를 활용하여 확인
         self.assertEqual(updated_calendar['location'], 'test-location')
         #ResourceWarning을 막기위해 테스트케이스마다 Service 종료
         service.close()
+
     
 
     def test_TC02_update_invalid_location(self) :
@@ -54,6 +56,7 @@ class google_api_test(unittest.TestCase):
         service.close()
 
 
+
     def test_TC04_update_invalid_timeZone(self) :
         service = build('calendar', 'v3', credentials=creds)
         calendar = service.calendars().get(calendarId='primary').execute()
@@ -63,6 +66,8 @@ class google_api_test(unittest.TestCase):
         self.assertIn('HttpError 400', str(context.exception))
         self.assertIn('Invalid Value', str(context.exception))
         service.close()
+
+
 
     def test_TC05_update_invalid_timeZone(self) :
         service = build('calendar', 'v3', credentials=creds)
@@ -74,6 +79,7 @@ class google_api_test(unittest.TestCase):
         self.assertIn('Invalid Value', str(context.exception))
         service.close()
 
+
     
     def test_TC06_update_description(self):
         service = build('calendar', 'v3', credentials=creds)
@@ -82,6 +88,8 @@ class google_api_test(unittest.TestCase):
         updated_calendar = service.calendars().update(calendarId=calendar['id'], body=calendar).execute()
         self.assertEqual(updated_calendar['description'], 'New description222')
         service.close()
+
+
 
     def test_TC07_update_invalid_description(self) :
         service = build('calendar', 'v3', credentials=creds)
@@ -95,7 +103,6 @@ class google_api_test(unittest.TestCase):
 
 
 
-
     def test_TC08_test_update_summary(self) :
         service = build('calendar', 'v3', credentials=creds)
         calendar = service.calendars().get(calendarId='primary').execute()
@@ -103,6 +110,7 @@ class google_api_test(unittest.TestCase):
         updated_calendar = service.calendars().update(calendarId=calendar['id'], body=calendar).execute()
         self.assertEqual(updated_calendar['summary'], 'New summary222')
         service.close()
+
 
     
     def test_TC09_update_invalid_summary(self) :
@@ -116,6 +124,7 @@ class google_api_test(unittest.TestCase):
         service.close()
 
 
+
     def test_TC10_update_invalid_summary(self) :
         service = build('calendar', 'v3', credentials=creds)
         calendar = service.calendars().get(calendarId='primary').execute()
@@ -125,6 +134,8 @@ class google_api_test(unittest.TestCase):
         self.assertIn('HttpError 400', str(context.exception))
         self.assertIn('A provided value exceeds the allowed size limit', str(context.exception))
         service.close()
+
+
 
     def test_TC11_update_invalid_calendarid(self) :
         service = build('calendar', 'v3', credentials=creds)
@@ -136,8 +147,12 @@ class google_api_test(unittest.TestCase):
         self.assertIn('Not Found', str(context.exception))
         service.close()
 
+
+
     def tearDown(self):
         print("Test Complete :", self._testMethodName)
+
+
 
 if __name__ == '__main__':
     unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='test-reports'))
